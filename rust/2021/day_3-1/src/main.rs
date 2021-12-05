@@ -40,12 +40,9 @@ fn main() {
 
     let r_epsilon = r_gamma
         .iter()
-        .map(|x| {
-            let v = match *x == 48u8 {
-                true => 49u8,
-                false => 48u8,
-            };
-            v
+        .map(|x| match *x == 48u8 {
+            true => 49u8,
+            false => 48u8,
         })
         .collect::<Vec<u8>>();
 
@@ -69,6 +66,7 @@ fn transpose(ab: Vec<Vec<u8>>) -> Vec<Vec<u8>> {
 
     let mut ba: Vec<_> = iter::repeat_with(|| vec![0; a_len]).take(b_len).collect();
 
+    // TODO: Address clippy warning
     for i in 0..b_len {
         for j in 0..a_len {
             ba[i][j] = ab[j][i];
