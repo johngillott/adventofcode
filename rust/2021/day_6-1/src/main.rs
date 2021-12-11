@@ -22,14 +22,14 @@ fn main() {
                 .collect::<Vec<i64>>()
         })
         .flatten()
-        .map(|n| Lanternfish::new(n))
+        .map(Lanternfish::new)
         .collect::<Vec<Lanternfish>>();
 
     for _ in 0..config.num_of_days {
         let mut new_fish = school
             .iter_mut()
             .map(|l| l.cycle())
-            .filter_map(|x| x)
+            .flatten()
             .collect::<Vec<Lanternfish>>();
 
         school.append(&mut new_fish);
@@ -59,9 +59,9 @@ impl Lanternfish {
             -1 => {
                 self.internal_timer = 6;
 
-                return Some(Lanternfish::new(8));
+                Some(Lanternfish::new(8))
             }
-            _ => return None,
+            _ => None,
         }
     }
 }
