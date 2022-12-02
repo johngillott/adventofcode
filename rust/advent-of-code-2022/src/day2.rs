@@ -1,3 +1,4 @@
+// TODO refactor input_generator to isolate part 1 and part 2 logic
 #[aoc_generator(day2)]
 pub fn input_generator(input: &str) -> Vec<(char, char)> {
     input
@@ -12,10 +13,26 @@ pub fn input_generator(input: &str) -> Vec<(char, char)> {
                 _ => unreachable!(),
             };
 
+            // : X means you need to lose,
+            // Y means you need to end the round in a draw,
+            // and Z means you need to win.
+
             match x.chars().nth(2).unwrap() {
-                'X' => strategy.1 = 'R',
-                'Y' => strategy.1 = 'P',
-                'Z' => strategy.1 = 'S',
+                'X' => match strategy.0 {
+                    // lose
+                    'R' => strategy.1 = 'S',
+                    'P' => strategy.1 = 'R',
+                    'S' => strategy.1 = 'P',
+                    _ => unreachable!(),
+                },
+                'Y' => strategy.1 = strategy.0,
+                'Z' => match strategy.0 {
+                    // win
+                    'R' => strategy.1 = 'P',
+                    'P' => strategy.1 = 'S',
+                    'S' => strategy.1 = 'R',
+                    _ => unreachable!(),
+                },
                 _ => unreachable!(),
             };
 
@@ -76,14 +93,40 @@ pub fn solve_part1(input: &[(char, char)]) -> u32 {
         .sum()
 }
 
-// #[aoc(day1, part2)]
-// pub fn solve_part2(input: &[(char, char)]) -> u32 {
-//     let mut sorted: Vec<u32> = input.iter().map(|elf| elf.iter().sum()).collect();
+#[aoc(day2, part2)]
+pub fn solve_part2(input: &[(char, char)]) -> u32 {
+    use std::cmp::Ordering;
 
-//     sorted.sort_by(|a, b| b.cmp(a));
+    input
+        .iter()
+        .map(|f| {
+            let mut score = 0;
 
-//     sorted.iter().take(3).sum()
-// }
+            match cmp(f) {
+                Ordering::Less => match f.1 {
+                    'R' => score = score + 1,
+                    'P' => score = score + 2,
+                    'S' => score = score + 3,
+                    _ => unimplemented!(),
+                },
+                Ordering::Equal => match f.1 {
+                    'R' => score = score + 1 + 3,
+                    'P' => score = score + 2 + 3,
+                    'S' => score = score + 3 + 3,
+                    _ => unimplemented!(),
+                },
+                Ordering::Greater => match f.1 {
+                    'R' => score = score + 1 + 6,
+                    'P' => score = score + 2 + 6,
+                    'S' => score = score + 3 + 6,
+                    _ => unimplemented!(),
+                },
+            }
+
+            score
+        })
+        .sum()
+}
 
 #[cfg(test)]
 mod tests {
