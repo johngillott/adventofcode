@@ -6,7 +6,7 @@ pub fn input_generator(input: &str) -> Vec<(char, char)> {
         .map(|x| {
             let mut strategy: (char, char) = (' ', ' ');
 
-            match x.chars().nth(0).unwrap() {
+            match x.chars().next().unwrap() {
                 'A' => strategy.0 = 'R',
                 'B' => strategy.0 = 'P',
                 'C' => strategy.0 = 'S',
@@ -69,21 +69,21 @@ pub fn solve_part1(input: &[(char, char)]) -> u32 {
 
             match cmp(f) {
                 Ordering::Less => match f.1 {
-                    'R' => score = score + 1,
-                    'P' => score = score + 2,
-                    'S' => score = score + 3,
+                    'R' => score += 1,
+                    'P' => score += 2,
+                    'S' => score += 3,
                     _ => unimplemented!(),
                 },
                 Ordering::Equal => match f.1 {
-                    'R' => score = score + 1 + 3,
-                    'P' => score = score + 2 + 3,
-                    'S' => score = score + 3 + 3,
+                    'R' => score += 1 + 3,
+                    'P' => score += 2 + 3,
+                    'S' => score += 3 + 3,
                     _ => unimplemented!(),
                 },
                 Ordering::Greater => match f.1 {
-                    'R' => score = score + 1 + 6,
-                    'P' => score = score + 2 + 6,
-                    'S' => score = score + 3 + 6,
+                    'R' => score += 1 + 6,
+                    'P' => score += 2 + 6,
+                    'S' => score += 3 + 6,
                     _ => unimplemented!(),
                 },
             }
@@ -104,21 +104,21 @@ pub fn solve_part2(input: &[(char, char)]) -> u32 {
 
             match cmp(f) {
                 Ordering::Less => match f.1 {
-                    'R' => score = score + 1,
-                    'P' => score = score + 2,
-                    'S' => score = score + 3,
+                    'R' => score += 1,
+                    'P' => score += 2,
+                    'S' => score += 3,
                     _ => unimplemented!(),
                 },
                 Ordering::Equal => match f.1 {
-                    'R' => score = score + 1 + 3,
-                    'P' => score = score + 2 + 3,
-                    'S' => score = score + 3 + 3,
+                    'R' => score += 1 + 3,
+                    'P' => score += 2 + 3,
+                    'S' => score += 3 + 3,
                     _ => unimplemented!(),
                 },
                 Ordering::Greater => match f.1 {
-                    'R' => score = score + 1 + 6,
-                    'P' => score = score + 2 + 6,
-                    'S' => score = score + 3 + 6,
+                    'R' => score += 1 + 6,
+                    'P' => score += 2 + 6,
+                    'S' => score += 3 + 6,
                     _ => unimplemented!(),
                 },
             }

@@ -57,7 +57,7 @@ pub fn input_generator_part_2(input: &str) -> Vec<Vec<HashSet<char>>> {
 }
 
 #[aoc(day3, part2)]
-pub fn solve_part2(input: &Vec<Vec<HashSet<char>>>) -> u32 {
+pub fn solve_part2(input: &[Vec<HashSet<char>>]) -> u32 {
     input
         .iter()
         .map(|f| {
@@ -65,7 +65,7 @@ pub fn solve_part2(input: &Vec<Vec<HashSet<char>>>) -> u32 {
                 .iter()
                 .filter(move |c| f[1..].iter().all(|s| s.contains(c)));
 
-            let badge = intersection.next().unwrap().clone();
+            let badge = *intersection.next().unwrap();
 
             let offset = match badge.is_lowercase() {
                 true => 96,
