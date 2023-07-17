@@ -11,7 +11,7 @@ pub fn solve_part1(input: &String) -> usize {
     let marker = iter
         .windows(4)
         .take_while(|s| {
-            let u = s.into_iter().unique().collect::<Vec<_>>();
+            let u = s.iter().unique().collect::<Vec<_>>();
 
             s.len() != u.len()
         })
@@ -28,7 +28,7 @@ pub fn solve_part2(input: &String) -> usize {
     let marker = iter
         .windows(14)
         .take_while(|s| {
-            let u = s.into_iter().unique().collect::<Vec<_>>();
+            let u = s.iter().unique().collect::<Vec<_>>();
 
             s.len() != u.len()
         })
