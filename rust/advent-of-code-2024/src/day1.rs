@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 type LocationIds = Vec<u32>;
 
 #[aoc_generator(day1)]
@@ -28,6 +30,23 @@ pub fn solve_part1(input: &(LocationIds, LocationIds)) -> u32 {
     iter.map(|(a, b)| a.abs_diff(*b)).sum()
 }
 
+#[aoc(day1, part2)]
+pub fn solve_part2(input: &(LocationIds, LocationIds)) -> u32 {
+    let mut m: HashMap<u32, u32> = HashMap::new();
+
+    input.1.iter().for_each(|v| *m.entry(*v).or_insert(0) += 1);
+
+    input
+        .0
+        .iter()
+        .map(|a| {
+            let count = m.get(a).unwrap_or(&0u32);
+
+            a * count
+        })
+        .sum()
+}
+
 /*
 AOC 2024
 */
@@ -46,5 +65,10 @@ mod tests {
     #[test]
     fn sample1() {
         assert_eq!(solve_part1(&input_generator(INPUT1)), 11);
+    }
+
+    #[test]
+    fn sample2() {
+        assert_eq!(solve_part2(&input_generator(INPUT1)), 31);
     }
 }
