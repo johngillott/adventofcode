@@ -1,22 +1,60 @@
 use regex::Regex;
 
-type Input = Vec<(u32, u32)>;
+type Input = Vec<Instruction>;
+
+enum Instruction {
+    Enable,
+    Disable,
+    Multiply(i32, i32),
+}
 
 #[aoc_generator(day3)]
-pub fn input_generator(input: &str) -> Input {
-    Regex::new(r"mul\(((\d+),(\d+))\)")
+fn input_generator(input: &str) -> Input {
+    Regex::new(r"((mul)|(do(n't)?))\(((\d+),(\d+))?\)")
         .unwrap()
         .captures_iter(input)
-        .map(|cap| {
-            let (_, [_, a, b]) = cap.extract();
-            (a.parse::<u32>().unwrap(), b.parse::<u32>().unwrap())
+        .map(|cap| match cap.get(1).unwrap().as_str() {
+            "don't" => Instruction::Disable,
+            "do" => Instruction::Enable,
+            "mul" => {
+                let a = cap.get(6).unwrap().as_str().parse().unwrap();
+                let b = cap.get(7).unwrap().as_str().parse().unwrap();
+                Instruction::Multiply(a, b)
+            }
+            _ => panic!(),
         })
         .collect()
 }
 
 #[aoc(day3, part1)]
-pub fn solve_part1(input: &Input) -> u32 {
-    input.iter().map(|v| v.0 * v.1).sum()
+fn solve_part1(input: &Input) -> i32 {
+    input
+        .iter()
+        .map(|v| match v {
+            Instruction::Multiply(a, b) => a * b,
+            _ => 0,
+        })
+        .sum()
+}
+
+#[aoc(day3, part2)]
+fn solve_part2(input: &Input) -> i32 {
+    let mut enabled = true;
+
+    let mut sum = 0;
+
+    for instruction in input.iter() {
+        match instruction {
+            Instruction::Multiply(a, b) => {
+                if enabled {
+                    sum = sum + a * b
+                }
+            }
+            Instruction::Enable => enabled = true,
+            Instruction::Disable => enabled = false,
+        }
+    }
+    sum
 }
 
 #[cfg(test)]
@@ -29,5 +67,10 @@ mod tests {
     #[test]
     fn example_1() {
         assert_eq!(solve_part1(&input_generator(INPUT)), 161);
+    }
+
+    #[test]
+    fn example_2() {
+        assert_eq!(solve_part2(&input_generator(INPUT)), 161);
     }
 }
