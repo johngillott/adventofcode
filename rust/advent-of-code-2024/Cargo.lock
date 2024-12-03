@@ -28,6 +28,7 @@ dependencies = [
  "id_tree",
  "itertools",
  "nom",
+ "regex",
  "rstest",
  "rust-crypto",
 ]
